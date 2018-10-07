@@ -53,5 +53,25 @@ print("b = %d" % b)
 # import math
 # math.sqrt(4) - вычисляет корень числа 4
 
+import math
+
 print("\n=== 3 ===")
 
+print("ax² + bx + c = 0")
+a = input ("a = ")
+b = input ("b = ")
+c = input ("c = ")
+print("")
+
+d = (b * b) - (4 * a * c)
+
+if d < 0:
+  print("Нет решений")
+elif d == 0:
+  x = (-b) / (2 * a)
+  print("x = %f" % x)
+else:
+  x1 = (-b + math.sqrt(d)) / (2 * a)
+  x2 = (-b - math.sqrt(d)) / (2 * a)
+  print("x1 = %f" % x1)
+  print("x2 = %f" % x2)
