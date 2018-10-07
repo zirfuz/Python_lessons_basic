@@ -10,11 +10,11 @@ __author__ = 'Alexey O.'
 
 # код пишем тут...
 
-# number = input ("Введите число: ")
-#
-# while number != 0:
-#   print(number % 10)
-#   number /= 10
+number = input ("Введите число: ")
+
+while number != 0:
+  print(number % 10)
+  number /= 10
 
 
 # Задача-2: Исходные значения двух переменных запросить у пользователя.
