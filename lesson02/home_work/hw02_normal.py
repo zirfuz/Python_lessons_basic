@@ -74,3 +74,20 @@ print(list)
 # например, lst = [1 , 2, 4, 5, 6, 2, 5, 2], нужно получить lst2 = [1, 4, 6]
 
 print("\n=== 4 ===")
+
+lst = [1, 2, 4, 5, 6, 2, 5, 2]
+lst2 = []
+
+for el in lst:
+  if not el in lst2:
+    lst2.append(el)
+
+print lst2
+
+lst2 = []
+
+for el in lst:
+  if lst.count(el) == 1:
+    lst2.append(el)
+
+print lst2
