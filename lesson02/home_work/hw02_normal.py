@@ -55,7 +55,15 @@ print("%s %s %d года." % (dates[date], months[month], year))
 # Подсказка:
 # для получения случайного числа используйте функцию randint() модуля random
 
+import random
+
 print("\n=== 3 ===")
+
+n = 10
+list = []
+for i in range(0, n):
+  list.append(random.randint(-100, 100))
+print(list)
 
 
 # Задача-4: Дан список, заполненный произвольными целыми числами.
