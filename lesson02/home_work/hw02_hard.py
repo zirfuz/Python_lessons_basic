@@ -7,8 +7,12 @@ equation = 'y = -12x + 11111140.2121'
 x = 2.5
 # вычислите и выведите y
 
-
 print("=== 1 ===")
+
+equation = equation[4:]
+equation = equation.replace('x', '*x')
+
+print('y = %f' % eval(equation))
 
 
 # Задание-2: Дата задана в виде строки формата 'dd.mm.yyyy'.
@@ -25,11 +29,41 @@ print("=== 1 ===")
 date = '01.11.1985'
 
 # Примеры некорректных дат
-date = '01.22.1001'
-date = '1.12.1001'
-date = '-2.10.3001'
+#date = '01.22.1001'
+#date = '1.12.1001'
+#date = '-2.10.3001'
 
 print("\n=== 2 ===")
+
+correct = len(date) == 10
+
+if correct:
+  for i in range(0, 10):
+    if i == 2 or i == 5:
+      if date[i] != '.':
+        correct = False
+    elif not date[i].isdigit():
+      correct = False
+
+if correct:
+  day = int(date[0:2])
+  month = int(date[3:5])
+  year = int(date[6:10])
+
+  if 1 > year or year > 1999:
+    correct = False
+
+  if 1 > month or month > 12:
+    correct = False
+
+  if day > 31:
+    correct = False
+
+  if month in (2, 4, 6, 9, 11) and day > 30:
+    correct = False
+
+print("%s: %r" % (date, correct))
+
 
 # Задание-3: "Перевёрнутая башня" (Задача олимпиадного уровня)
 #
