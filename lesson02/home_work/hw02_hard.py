@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+
 # Задание-1: уравнение прямой вида y = kx + b задано в виде строки.
 # Определить координату y точки с заданной координатой x.
 
 equation = 'y = -12x + 11111140.2121'
 x = 2.5
 # вычислите и выведите y
+
+
+print("=== 1 ===")
 
 
 # Задание-2: Дата задана в виде строки формата 'dd.mm.yyyy'.
@@ -24,6 +29,7 @@ date = '01.22.1001'
 date = '1.12.1001'
 date = '-2.10.3001'
 
+print("\n=== 2 ===")
 
 # Задание-3: "Перевёрнутая башня" (Задача олимпиадного уровня)
 #
@@ -54,3 +60,33 @@ date = '-2.10.3001'
 #
 # Вход: 11
 # Выход: 5 3
+
+
+print("\n=== 3 ===")
+
+def f(room):
+  sumPrev = 0
+  sum = 0
+  sum2Prev = 0
+  sum2 = 0
+  side = 0
+
+  while room > sum2:
+    sumPrev = sum
+    sum2Prev = sum2
+    side += 1
+    sum += side
+    sum2 += side ** 2
+
+  room -= sum2Prev
+  room -= 1
+
+  floor = sumPrev + room / side + 1
+  fromLeft = room % side + 1
+
+  return floor, fromLeft
+
+
+for room in xrange(1, 51):
+  floor, fromLeft = f(room)
+  print("%2d: %2d %2d" % (room, floor, fromLeft))
