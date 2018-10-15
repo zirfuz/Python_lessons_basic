@@ -63,17 +63,17 @@ if minus:
 
 cm = left[1] * right[1]
 
-result = [left[0] * cm / left[1] + right[0] * cm / right[1], cm]
+result = [left[0] * cm // left[1] + right[0] * cm // right[1], cm]
 
 resultGcd = gcd(result[0], result[1])
 
-result[0] /= resultGcd
-result[1] /= resultGcd
+result[0] //= resultGcd
+result[1] //= resultGcd
 
 negative = result[0] < 0
 
 frac = [abs(result[0]), abs(result[1])]
-integer = abs(result[0]) / abs(result[1])
+integer = abs(result[0]) // abs(result[1])
 frac[0] -= frac[1] * integer
 
 resultStr = ""
