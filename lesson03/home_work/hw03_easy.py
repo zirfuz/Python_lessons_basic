@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Задание-1:
 # Напишите функцию, округляющую полученное произвольное десятичное число
 # до кол-ва знаков (кол-во знаков передается вторым аргументом).
@@ -9,10 +7,11 @@
 print("=== 1 ===")
 
 def my_round(number, ndigits):
-  number *= (10 * ndigits)
+  n = 10 ** ndigits
+  number *= n
   number += 0.5
   number = int(number)
-  number /= (10 * ndigits)
+  number /= n
   return number
 
 print(my_round(2.1234567, 5))
