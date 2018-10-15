@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+import os
+import pickle
 
 # Задание-1:
 # Написать программу, выполняющую операции (сложение и вычитание) с простыми дробями.
@@ -39,7 +40,7 @@ def parseFrac(str):
   frac[0] += integer * frac[1]
   return frac
 
-expr = raw_input("expression: ")
+expr = input("Expression: ")
 minus = False
 
 operatorIndex = expr.find(" - ")
@@ -99,6 +100,39 @@ print(resultStr)
 
 print("\n=== 2 ===")
 
+NORM = 160
+DIR = './data'
+
+with open(os.path.join(DIR, 'workers'), 'r', encoding='UTF-8') as f:
+  lines = f.readlines()[1:]
+
+workers = []
+for line in lines:
+  name, surname, sallary, position, hour_rate = line.split()
+  workers.append( ((name, surname), int(sallary), int(hour_rate)) )
+
+with open(os.path.join(DIR, 'hours_of'), 'r', encoding='UTF-8') as f:
+  lines = f.readlines()[1:]
+
+hours_of = {}
+for line in lines:
+  name, surname, hours = line.split()
+  hours_of[(name, surname)] = int(hours)
+
+result = []
+for worker in workers:
+  sallary, hour_rate = worker[1], worker[2]
+  ho = hours_of[worker[0]]
+  overtime = ho - hour_rate
+  if overtime > 0:
+    overtime *= 2
+  over_sallary = (overtime / float(hour_rate)) * sallary
+  total_sallary = sallary + over_sallary
+  result.append( (worker[0], total_sallary) )
+
+for res in result:
+  print("%s %s %d" % (res[0][0], res[0][1], res[1]))
+
 # Задание-3:
 # Дан файл ("data/fruits") со списком фруктов.
 # Записать в новые файлы все фрукты, начинающиеся с определенной буквы.
@@ -113,3 +147,20 @@ print("\n=== 2 ===")
 # print(list(map(chr, range(ord('А'), ord('Я')+1))))
 
 print("\n=== 3 ===")
+
+DIR = './data'
+with open(os.path.join(DIR, 'fruits.txt'), 'r', encoding='UTF-8') as f:
+  fruits = f.readlines()
+fruits = list(filter(lambda s: s != '\n', fruits))
+
+fruits = [element.strip() for element in fruits]
+
+for letter in list(map(chr, range(ord(u'А'), ord(u'Я')+1))):
+  letter_fruits = list(filter(lambda str: str[0] == letter, fruits))
+  if len(letter_fruits) != 0:
+    f = open(os.path.join(DIR, 'fruits_' + letter), 'w', encoding='UTF-8')
+    for fruit in letter_fruits:
+      f.write(fruit + '\n')
+    f.close()
+
+print('Done.')
