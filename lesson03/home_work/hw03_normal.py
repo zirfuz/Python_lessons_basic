@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Задание-1:
 # Напишите функцию, возвращающую ряд Фибоначчи с n-элемента до m-элемента.
 # Первыми элементами ряда считать цифры 1 1
@@ -9,7 +7,7 @@ print("=== 1 ===")
 def fibonacci(n, m):
   a, b = 1, 1
   ret = []
-  for i in xrange(1, m + 1):
+  for i in range(1, m + 1):
     if i >= n:
       ret.append(a)
     a, b = b, a + b
@@ -28,8 +26,8 @@ print(fibonacci(3, 10))
 print("\n=== 2 ===")
 
 def sort_to_max(origin_list):
-  for i in xrange(len(origin_list)):
-    for j in xrange(i + 1, len(origin_list)):
+  for i in range(len(origin_list)):
+    for j in range(i + 1, len(origin_list)):
       if origin_list[i] > origin_list[j]:
         origin_list[i], origin_list[j] = origin_list[j], origin_list[i]
   return origin_list
@@ -49,8 +47,8 @@ def my_filter(func, sequence):
       ret.append(x)
   return ret
 
-print(filter(lambda x: x > 5, [2, 10, -10, 8, 2, 0, 14]))
-print(my_filter(lambda x: x > 5, [2, 10, -10, 8, 2, 0, 14]))
+print(list(filter(lambda x: x > 5, [2, 10, -10, 8, 2, 0, 14])))
+print(list(my_filter(lambda x: x > 5, [2, 10, -10, 8, 2, 0, 14])))
 
 # Задача-4:
 # Даны четыре точки А1(х1, у1), А2(x2 ,у2), А3(x3 , у3), А4(х4, у4).
