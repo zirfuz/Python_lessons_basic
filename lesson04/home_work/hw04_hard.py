@@ -1,3 +1,5 @@
+import random
+
 # Задание-1:
 # Матрицы в питоне реализуются в виде вложенных списков:
 # Пример. Дано:
@@ -70,3 +72,30 @@ print('[{}] : {}'.format(index, max_product))
 # Если ферзи не бьют друг друга, выведите слово NO, иначе выведите YES.
 
 print('\n=== 3 ===')
+
+def beat(queens):
+  for i in range(0, len(queens) - 1):
+    for j in range(i + 1, len(queens)):
+      queen1 = queens[i]
+      queen2 = queens[j]
+      if queen1[0] == queen2[0]: return True
+      if queen1[1] == queen2[1]: return True
+      if abs(queen1[0] - queen2[0]) == abs(queen1[1] - queen2[1]): return True
+  return False
+
+def print_queens(queens):
+  for i in range(1, len(queens) + 1):
+    s = ''
+    for j in range(1, len(queens) + 1):
+      s += 'O ' if (i, j) in queens else '+ '
+    print(s)
+
+queens = [(random.randint(1,8), random.randint(1,8)) for _ in range(8)]
+print_queens(queens)
+print('YES' if beat(queens) else 'NO')
+
+print()
+
+queens = ((2,1), (5,2), (7,3), (1,4), (3,5), (8,6), (6,7), (4,8))
+print_queens(queens)
+print('YES' if beat(queens) else 'NO')
