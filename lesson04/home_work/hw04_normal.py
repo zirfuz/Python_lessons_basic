@@ -1,4 +1,5 @@
 import re
+import random
 
 # Задание-1:
 # Вывести символы в нижнем регистре, которые находятся вокруг
@@ -107,3 +108,32 @@ print(result)
 # в вышезаполненном файле.
 
 print('\n=== 3 ===')
+
+digits = [random.randint(0, 9) for _ in range(2500)]
+
+f = open('random.txt', 'w')
+f.write(''.join(str(digit) for digit in digits))
+f.close()
+
+f = open('random.txt')
+number_str = f.read()
+f.close()
+
+digits = [int(ch) for ch in number_str]
+
+index = 0
+max_begin_index = -1
+max_count = 0
+digit = None
+
+for i in range(len(digits)):
+  if digits[i] == digit:
+    count = i - index + 1
+    if count > max_count:
+      max_begin_index = index
+      max_count = count
+  else:
+    index = i
+    digit = digits[i]
+
+print(digits[max_begin_index : max_begin_index + max_count])
