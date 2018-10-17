@@ -77,6 +77,26 @@ line_2 = 'mtMmEZUOmcqWiryMQhhTxqKdSTKCYEJlEZCsGAMkgAYEOmHBSQsSUHKvSfbmxULaysm'\
        'JFaXiUWgsKQrDOeZoNlZNRvHnLgCmysUeKnVJXPFIzvdDyleXylnKBfLCjLHntltignbQ'\
        'oiQzTYwZAiRwycdlHfyHNGmkNqSwXUrxGC'
 
+# With re
+result = re.findall(r'[a-z]{2}[A-Z]+[A-Z]{2}', line_2)
+for i in range(0, len(result)):
+  result[i] = result[i][2:-2]
+print(result)
+
+# Without re
+result = []
+for i in range(1, len(line_2) - 1):
+  if line_2[i - 1].islower() and line_2[i].islower():
+    s = ''
+    i += 1
+    while i < len(line_2) and line_2[i].isupper():
+      s += line_2[i]
+      i += 1
+    if len(s) > 2:
+      result.append(s[:-2])
+
+print(result)
+
 
 
 # Задание-3:
