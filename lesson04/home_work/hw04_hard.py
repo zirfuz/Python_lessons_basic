@@ -90,7 +90,14 @@ def print_queens(queens):
       s += 'O ' if (i, j) in queens else '+ '
     print(s)
 
-queens = [(random.randint(1,8), random.randint(1,8)) for _ in range(8)]
+queens = []
+for _ in range(8):
+  while True:
+    queen = (random.randint(1,8), random.randint(1,8))
+    if not queen in queens:
+      queens.append(queen)
+      break
+
 print_queens(queens)
 print('YES' if beat(queens) else 'NO')
 
