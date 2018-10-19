@@ -2,12 +2,10 @@ import os
 import sys
 import shutil
 
-def make_dir(name):
-  dir_path = os.path.join(os.getcwd(), name)
+def make_dir(dir_path):
   os.mkdir(dir_path)
 
-def remove_dir(name):
-  dir_path = os.path.join(os.getcwd(), name)
+def remove_dir(dir_path):
   os.rmdir(dir_path)
 
 def print_cur_dir():
@@ -25,6 +23,7 @@ if __name__ == '__main__':
   def make_dirs():
     for i in range(1, 10):
       name = 'dir_' + str(i)
+      name = os.path.join(os.getcwd(), name)
       try:
         make_dir(name)
       except FileExistsError:
@@ -33,6 +32,7 @@ if __name__ == '__main__':
   def remove_dirs():
     for i in range(1, 10):
       name = 'dir_' + str(i)
+      name = os.path.join(os.getcwd(), name)
       try:
         remove_dir(name)
       except FileNotFoundError:
