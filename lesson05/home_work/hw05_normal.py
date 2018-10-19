@@ -38,7 +38,7 @@ while True:
     try:
       os.chdir(fol)
       print('Успешно перешел')
-    except:
+    except OSError:
       print('Невозможно перейти')
 
   elif sel == 2:
@@ -47,7 +47,7 @@ while True:
   elif sel == 3:
     fol = input('Folder name: ')
     try:
-      remove_dir(fol)
+      remove_dir(os.path.join(os.getcwd(), fol))
       print('Успешно удалено')
     except:
       print('Невозможно удалить')
@@ -55,7 +55,7 @@ while True:
   elif sel == 4:
     fol = input('Folder name: ')
     try:
-      make_dir(fol)
+      make_dir(os.path.join(os.getcwd(), fol))
       print('Успешно создано')
     except:
       print('Невозможно создать')
