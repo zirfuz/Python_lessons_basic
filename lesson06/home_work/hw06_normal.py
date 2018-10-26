@@ -46,8 +46,6 @@ class ClassRoom:
     def char(self):
         return self.__class_room['class_char']
 
-def equal(class_room1, class_room2):
-    class_room1.num == class_room2.num and class_room1.char == class_room2.char
 
 class Student(Human):
     def __init__(self, name, surname, patronymic, class_room, mother, father):
@@ -109,46 +107,54 @@ class School:
         students.sort()
         return '\n'.join(students)
 
-    def subjects(self, student):
-        ret = []
+    def get_subjects(self, student):
+        subjects = []
         for teacher in self.__teachers:
             for class_room in teacher.class_rooms:
-                if equal(class_room, student.class_room):
-                    ret.append(teacher.subject)
-        return ret
+                if class_room == student.class_room:
+                    subjects.append(teacher.subject)
+        subjects.sort()
+        return '\n'.join(subjects)
 
 
-school = School()
+
+if __name__ == "__main__":
+    try:
+        school = School()
 
 
-teacher1 = Teacher('Васильев', 'Василий', 'Васильевич', 'Математика')
-teacher2 = Teacher('Александров', 'Александр', 'Александрович', 'Литература')
+        teacher1 = Teacher('Васильев',    'Василий',   'Васильевич',    'Математика')
+        teacher2 = Teacher('Александров', 'Александр', 'Александрович', 'Литература')
 
-teacher1.class_rooms = { ClassRoom('1 А') }
-teacher2.class_rooms = { ClassRoom('1 А'), ClassRoom('2 Б') }
-
-
-student1 = Student('Иванов',   'Иван',    'Иванович',   '1 А', Human('Иванова',   'Валентина', 'Петровна'), Human('Иванов',   'Иван',    'Александрович'))
-student2 = Student('Васильев', 'Василий', 'Васильевич', '1 А', Human('Васильева', 'Василиса',  'Василиса'), Human('Васильев', 'Василий', 'Васильевич'))
-student3 = Student('Петров',   'Пётр',    'Петрович',   '2 Б', Human('Петрова',   'Валерия',   'Петровна'), Human('Петров',   'Пётр',    'Иванович'))
+        teacher1.class_rooms = { ClassRoom('1 А') }
+        teacher2.class_rooms = { ClassRoom('1 А'), ClassRoom('2 Б') }
 
 
-school.add_student(student1)
-school.add_student(student2)
-school.add_student(student3)
+        student1 = Student('Иванов',   'Иван',    'Иванович',   '1 А', Human('Иванова',   'Валентина', 'Петровна'), Human('Иванов',   'Иван',    'Александрович'))
+        student2 = Student('Васильев', 'Василий', 'Васильевич', '1 А', Human('Васильева', 'Василиса',  'Василиса'), Human('Васильев', 'Василий', 'Васильевич'))
+        student3 = Student('Петров',   'Пётр',    'Петрович',   '2 Б', Human('Петрова',   'Валерия',   'Петровна'), Human('Петров',   'Пётр',    'Иванович'))
 
-school.add_teacher(teacher1)
-school.add_teacher(teacher2)
 
-print('--- Классы ---')
-print(school.get_class_rooms())
-print()
+        school.add_student(student1)
+        school.add_student(student2)
+        school.add_student(student3)
 
-print('--- Ученики (1 А) ---')
-print(school.get_students('1 А'))
-print()
+        school.add_teacher(teacher1)
+        school.add_teacher(teacher2)
 
-print('--- Предметы ({}) ---'.format(student1.get_full_name()))
-print(school.subjects(student1))
-print()
+        print('--- Классы ---')
+        print(school.get_class_rooms())
+        print()
 
+        class_room = '1 А'
+        print('--- Ученики ({}) ---'.format(class_room))
+        print(school.get_students(class_room))
+        print()
+
+        student = student2
+        print('--- Предметы ({}) ---'.format(student.get_full_name()))
+        print(school.get_subjects(student))
+        print()
+
+    except:
+        print('ОШИБКА!')
