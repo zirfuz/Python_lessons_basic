@@ -116,6 +116,14 @@ class School:
         subjects.sort()
         return '\n'.join(subjects)
 
+    def get_parents(self, student):
+        return student.father() + '\n' + student.mother()
+
+    def get_teachers(self, subject):
+        teachers = [teacher.get_full_name() for teacher in self.__teachers if teacher.subject == subject]
+        teachers.sort()
+        return '\n'.join(teachers)
+
 
 
 if __name__ == "__main__":
@@ -125,6 +133,7 @@ if __name__ == "__main__":
 
         teacher1 = Teacher('Васильев',    'Василий',   'Васильевич',    'Математика')
         teacher2 = Teacher('Александров', 'Александр', 'Александрович', 'Литература')
+        teacher3 = Teacher('Ильин',       'Илья',      'Ильич',         'Математика')
 
         teacher1.class_rooms = { ClassRoom('1 А') }
         teacher2.class_rooms = { ClassRoom('1 А'), ClassRoom('2 Б') }
@@ -141,19 +150,30 @@ if __name__ == "__main__":
 
         school.add_teacher(teacher1)
         school.add_teacher(teacher2)
+        school.add_teacher(teacher3)
 
-        print('--- Классы ---')
+        print('1) --- КЛАССЫ ---')
         print(school.get_class_rooms())
         print()
 
         class_room = '1 А'
-        print('--- Ученики ({}) ---'.format(class_room))
+        print('2) --- УЧЕНИКИ (Класс: {}) ---'.format(class_room))
         print(school.get_students(class_room))
         print()
 
         student = student2
-        print('--- Предметы ({}) ---'.format(student.get_full_name()))
+        print('3) --- ПРЕДМЕТЫ (Ученик: {}) ---'.format(student.get_full_name()))
         print(school.get_subjects(student))
+        print()
+
+        student = student3
+        print('4) --- РОДИТЕЛИ (Ученик: {}) ---'.format(student.get_full_name()))
+        print(school.get_parents(student))
+        print()
+
+        subject = 'Математика'
+        print('5) --- УЧИТЕЛЯ (Предмет: {}) ---'.format(subject))
+        print(school.get_teachers(subject))
         print()
 
     except:
