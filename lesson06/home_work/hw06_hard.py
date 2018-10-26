@@ -62,7 +62,7 @@ class Main:
 
     def set_workers(self, file_name):
         self.__workers = []
-        with open(os.path.join(DIR, 'workers'), 'r', encoding='UTF-8') as f:
+        with open(file_name, 'r', encoding='UTF-8') as f:
             for line in f.readlines()[1:]:
                 self.__workers.append(Worker(line))
 
