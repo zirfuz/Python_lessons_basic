@@ -105,7 +105,9 @@ class School:
 
     def get_students(self, class_room):
         cr = ClassRoom(class_room)
-        return [student.get_full_name() for student in self.__students if equal(student.class_room, cr)]
+        students = [student.get_full_name() for student in self.__students if student.class_room == cr]
+        students.sort()
+        return '\n'.join(students)
 
     def subjects(self, student):
         ret = []
@@ -138,8 +140,15 @@ school.add_student(student3)
 school.add_teacher(teacher1)
 school.add_teacher(teacher2)
 
-
+print('--- Классы ---')
 print(school.get_class_rooms())
+print()
+
+print('--- Ученики (1 А) ---')
 print(school.get_students('1 А'))
+print()
+
+print('--- Предметы ({}) ---'.format(student1.get_full_name()))
 print(school.subjects(student1))
+print()
 
