@@ -66,7 +66,7 @@ class Main:
             for line in f.readlines()[1:]:
                 self.__workers.append(Worker(line))
 
-    def workers_eaned(self, file_name):
+    def workers_earned(self, file_name):
         rnd = lambda earned: None if earned is None else round(earned)
         return '\n'.join('{}: {}'.format(w.get_full_name(), rnd(w.earned_f(file_name))) for w in self.__workers)
 
@@ -77,6 +77,6 @@ if __name__ == "__main__":
     try:
         main = Main()
         main.set_workers(os.path.join(DIR, 'workers'))
-        print(main.workers_eaned(os.path.join(DIR, 'hours_of')))
+        print(main.workers_earned(os.path.join(DIR, 'hours_of')))
     except:
         print("ERROR!")
