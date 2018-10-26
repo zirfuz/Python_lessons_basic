@@ -29,6 +29,10 @@ class ClassRoom:
     def __init__(self, class_room):
         self.__class_room = {'class_num': int(class_room.split()[0]),
                              'class_char': class_room.split()[1]}
+    def __eq__(self, other):
+        return self.__class_room == other.__class_room
+    def __hash__(self):
+        return self.num * hash(self.char)
 
     @property
     def str(self):
@@ -42,6 +46,8 @@ class ClassRoom:
     def char(self):
         return self.__class_room['class_char']
 
+def equal(class_room1, class_room2):
+    class_room1.num == class_room2.num and class_room1.char == class_room2.char
 
 class Student(Human):
     def __init__(self, name, surname, patronymic, class_room, mother, father):
@@ -67,7 +73,7 @@ class Teacher(Human):
     def __init__(self, name, surname, patronymic, subject):
         Human.__init__(self, name, surname, patronymic)
         self.subject = subject
-        self.__class_rooms = set()
+        self.__class_rooms = []
 
     @property
     def class_rooms(self):
@@ -92,18 +98,26 @@ class School:
         self.__teachers.append(teacher)
         self.__class_rooms.union(teacher.class_rooms)
 
-    @property
-    def class_rooms_str(self):
-        return '\n'.join([class_room.str for class_room in self.__class_rooms])
+    def get_class_rooms(self):
+        crs = [class_room.str for class_room in self.__class_rooms]
+        crs.sort()
+        return '\n'.join(crs)
 
-    def students(self, class_room):
+    def get_students(self, class_room):
         cr = ClassRoom(class_room)
-        return [student.get_full_name() for student in self.__students \
-                                            if student.class_room.num == cr.num and student.class_room.char == cr.char]
+        return [student.get_full_name() for student in self.__students if equal(student.class_room, cr)]
 
+    def subjects(self, student):
+        ret = []
+        for teacher in self.__teachers:
+            for class_room in teacher.class_rooms:
+                if equal(class_room, student.class_room):
+                    ret.append(teacher.subject)
+        return ret
 
 
 school = School()
+
 
 teacher1 = Teacher('Васильев', 'Василий', 'Васильевич', 'Математика')
 teacher2 = Teacher('Александров', 'Александр', 'Александрович', 'Литература')
@@ -111,14 +125,21 @@ teacher2 = Teacher('Александров', 'Александр', 'Алекса
 teacher1.class_rooms = { ClassRoom('1 А') }
 teacher2.class_rooms = { ClassRoom('1 А'), ClassRoom('2 Б') }
 
-school.add_student(Student('Иванов',   'Иван',    'Иванович',   '1 А', Human('Иванова',   'Валентина', 'Петровна'), Human('Иванов',   'Иван',    'Александрович')))
-school.add_student(Student('Васильев', 'Василий', 'Васильевич', '1 А', Human('Васильева', 'Василиса',  'Василиса'), Human('Васильев', 'Василий', 'Васильевич')))
-school.add_student(Student('Петров',   'Пётр',    'Петрович',   '2 Б', Human('Петрова',   'Валерия',   'Петровна'), Human('Петров',   'Пётр',    'Иванович')))
+
+student1 = Student('Иванов',   'Иван',    'Иванович',   '1 А', Human('Иванова',   'Валентина', 'Петровна'), Human('Иванов',   'Иван',    'Александрович'))
+student2 = Student('Васильев', 'Василий', 'Васильевич', '1 А', Human('Васильева', 'Василиса',  'Василиса'), Human('Васильев', 'Василий', 'Васильевич'))
+student3 = Student('Петров',   'Пётр',    'Петрович',   '2 Б', Human('Петрова',   'Валерия',   'Петровна'), Human('Петров',   'Пётр',    'Иванович'))
+
+
+school.add_student(student1)
+school.add_student(student2)
+school.add_student(student3)
 
 school.add_teacher(teacher1)
 school.add_teacher(teacher2)
 
 
-print(school.class_rooms_str)
-print(school.students('1 А'))
+print(school.get_class_rooms())
+print(school.get_students('1 А'))
+print(school.subjects(student1))
 
