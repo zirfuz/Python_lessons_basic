@@ -48,11 +48,8 @@ def check_parallel(a1, a2, b1, b2):
     return (a1[0] - a2[0]) / (a1[1] - a2[1]) == \
            (b1[0] - b2[0]) / (b1[1] - b2[1])
 
-
-def ccw(a, b, c):
-    return (c[1]-a[1]) * (b[0]-a[0]) > (b[1]-a[1]) * (c[0]-a[0])
-
 def check_intersect(a,b,c,d):
+    ccw = lambda a, b, c: (c[1]-a[1]) * (b[0]-a[0]) > (b[1]-a[1]) * (c[0]-a[0])
     return ccw(a,c,d) != ccw(b,c,d) and ccw(a,b,c) != ccw(a,b,d)
 
 
