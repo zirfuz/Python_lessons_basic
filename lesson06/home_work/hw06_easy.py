@@ -42,7 +42,6 @@ print('Height    = {}'.format(triangle.height()))
 
 print('\n=== 2 ===')
 
-
 def check_parallel(a1, a2, b1, b2):
     if a1[1] == a2[1]: return b1[1] == b2[1]
     if b1[1] == b2[1]: return False
