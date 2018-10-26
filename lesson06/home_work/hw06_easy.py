@@ -71,8 +71,7 @@ class Trapezoid:
         return dist(base0, base1), dist(base2, base3), dist(nb0, nb1), dist(nb2, nb3)
 
     def perimeter(self):
-        d0, d1, d2, d3 = self.lens()
-        return d0 + d1 + d2 + d3
+        return sum(self.lens())
 
     def area(self):
         base0, base1, base2, base3 = self.__find_bases()
