@@ -77,6 +77,10 @@ class Generator:
         self.__remain_count -= 1
         return ret
 
+    @property
+    def remain(self):
+        return self.__remain_count - self.__min + 1
+
 
 class Ticket: # None: empty, 0: crossed
     def __init__(self, gen, title):
@@ -109,7 +113,7 @@ class Ticket: # None: empty, 0: crossed
             ret += frmt % s
             if (i + 1) % 9 == 0:
                 ret += '\n'
-        ret += '-' * 26 + '\n'
+        ret += '-' * 26
         return ret
 
 
@@ -119,14 +123,25 @@ class Loto:
         self.__player = Ticket(self.__gen, 'Ваша карточка')
         self.__comp = Ticket(self.__gen, 'Карточка компьютера')
 
-    def __str__(self):
+    def __str(self):
         ret = ''
-        ret += 'Новый бочонок: 70 (осталось 76)\n'
+        ret += 'Новый бочонок: %2d (осталось %2d)\n' % (self.__number, self.__gen.remain)
         ret += self.__player.__str__()
+        ret += '\n'
         ret += self.__comp.__str__()
-        ret += 'Зачеркнуть цифру? (y/n)'
         return ret
+
+    def __input_cross(self):
+        while True:
+            sel = input('Зачеркнуть цифру? (y/n) ')
+            if sel in ('yn'):
+                break
+
+    def next(self):
+        self.__number = self.__gen()
+        print(self.__str())
+        self.__input_cross()
 
 
 loto = Loto()
-print(loto)
+loto.next()
