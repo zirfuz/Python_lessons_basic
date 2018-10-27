@@ -79,7 +79,8 @@ class Generator:
 
 
 class Ticket: # None: empty, 0: crossed
-    def __init__(self, gen):
+    def __init__(self, gen, title):
+        self.__title = title
         self.__cells = [None] * 27
         for line_begin in range(0, 27, 9):
             gen_indexes = Generator(line_begin, line_begin + 8)
@@ -90,8 +91,16 @@ class Ticket: # None: empty, 0: crossed
             for i in range(5):
                 self.__cells[indexes[i]] = numbers[i]
 
-    def str(self):
-        ret = '-' * 26 + '\n'
+    @property
+    def __title_str(self):
+        ret = ''
+        ret += '-' * ((24 - len(self.__title)) // 2)
+        ret += ' ' + self.__title + ' '
+        ret += '-' * (26 - len(ret))
+        return ret
+
+    def __str__(self):
+        ret = self.__title_str + '\n'
         for i, cell in enumerate(self.__cells):
             s = ''
             if cell is not None:
@@ -103,9 +112,21 @@ class Ticket: # None: empty, 0: crossed
         ret += '-' * 26 + '\n'
         return ret
 
-gen = Generator(1, 90)
-ticket = Ticket(gen)
-print(ticket.str())
 
-# gen = Generator(1,5)
-# print([gen()]*5)
+class Loto:
+    def __init__(self):
+        self.__gen = Generator(1, 90)
+        self.__player = Ticket(self.__gen, 'Ваша карточка')
+        self.__comp = Ticket(self.__gen, 'Карточка компьютера')
+
+    def __str__(self):
+        ret = ''
+        ret += 'Новый бочонок: 70 (осталось 76)\n'
+        ret += self.__player.__str__()
+        ret += self.__comp.__str__()
+        ret += 'Зачеркнуть цифру? (y/n)'
+        return ret
+
+
+loto = Loto()
+print(loto)
