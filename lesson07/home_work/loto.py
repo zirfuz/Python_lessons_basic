@@ -78,6 +78,10 @@ class Generator:
         return ret
 
     @property
+    def iteration(self):
+        return self.__max - self.__remain_count + 1
+
+    @property
     def remain(self):
         return self.__remain_count - self.__min + 1
 
@@ -94,6 +98,20 @@ class Ticket: # None: empty, 0: crossed
             indexes.sort()
             for i in range(5):
                 self.__cells[indexes[i]] = numbers[i]
+
+    def cross(self, number):
+        for i, cell in enumerate(self.__cells):
+            if cell == number:
+                self.__cells[i] = 0
+                return True
+        return False
+
+    @property
+    def finish(self):
+        for cell in self.__cells:
+            if cell is not None and cell != 0:
+                return False
+        return True
 
     @property
     def __title_str(self):
@@ -119,13 +137,14 @@ class Ticket: # None: empty, 0: crossed
 
 class Loto:
     def __init__(self):
-        self.__gen = Generator(1, 90)
-        self.__player = Ticket(self.__gen, 'Ваша карточка')
-        self.__comp = Ticket(self.__gen, 'Карточка компьютера')
+        max_number = 90
+        gen = Generator(1, max_number)
+        self.__gen = Generator(1, max_number)
+        self.__player = Ticket(gen, 'Ваша карточка')
+        self.__comp = Ticket(gen, 'Карточка компьютера')
 
     def __str(self):
         ret = ''
-        ret += 'Новый бочонок: %2d (осталось %2d)\n' % (self.__number, self.__gen.remain)
         ret += self.__player.__str__()
         ret += '\n'
         ret += self.__comp.__str__()
@@ -134,14 +153,33 @@ class Loto:
     def __input_cross(self):
         while True:
             sel = input('Зачеркнуть цифру? (y/n) ')
-            if sel in ('yn'):
+            if sel in ('yn') and sel != '':
                 break
+        return sel == 'y'
 
-    def next(self):
+    def play(self):
+        print('============== ' + '%2d ' %  + self.__gen.iteration + '===============')
         self.__number = self.__gen()
+        print('Новый бочонок: [%2d] (осталось %2d)' % (self.__number, self.__gen.remain))
         print(self.__str())
-        self.__input_cross()
+        sel = self.__input_cross()
+        self.__comp.cross(self.__number)
+        print()
+        if sel != self.__player.cross(self.__number):
+            print('Вы проиграли :(')
+            return False
+        if self.__player.finish:
+            print(self.__str())
+            print('Вы выиграли :)')
+            return True
+        elif self.__comp.finish:
+            print(self.__str())
+            print('Вы проиграли :(')
+            return False
+        print()
+        return self.play()
 
 
-loto = Loto()
-loto.next()
+if __name__ == "__main__":
+    loto = Loto()
+    loto.play()
