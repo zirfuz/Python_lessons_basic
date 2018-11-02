@@ -47,6 +47,10 @@ class TicTacToeCore:
     def win(self):
         ret1 = []
         for i in range(self.__size):
+            if len(ret1) >= 5:
+                break
+            else:
+                ret1 = []
             for j in range(self.__size):
                 if self.__cells[i][j] == self.__current:
                     ret1.append((i,j))
@@ -60,6 +64,10 @@ class TicTacToeCore:
 
         ret2 = []
         for i in range(self.__size):
+            if len(ret2) >= 5:
+                break
+            else:
+                ret2 = []
             for j in range(self.__size):
                 if self.__cells[j][i] == self.__current:
                     ret2.append((j,i))
@@ -74,6 +82,10 @@ class TicTacToeCore:
         ret3 = []
         for i in range(self.__size):
             for j in range(self.__size):
+                if len(ret3) >= 5:
+                    break
+                else:
+                    ret3 = []
                 for k in range(self.__size):
                     if i+k >= self.__size or j+k >= self.__size:
                         if len(ret3) >= 5:
@@ -94,6 +106,10 @@ class TicTacToeCore:
         ret4 = []
         for i in range(self.__size):
             for j in range(self.__size):
+                if len(ret4) >= 5:
+                    break
+                else:
+                    ret4 = []
                 for k in range(self.__size):
                     if i+k >= self.__size or j-k < 0:
                         if len(ret4) >= 5:
@@ -116,4 +132,5 @@ class TicTacToeCore:
             return None
 
         self.__game_over = True
+       # self.win()
         return ret

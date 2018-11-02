@@ -85,6 +85,10 @@ class TicTacToe:
             beep(400, 500)
 
     def __clicked(self, event):
+        if self.__ttt.game_over:
+            self.__ttt.win()
+
+
         but = event.widget
         if but['state'] == 'disabled':
             return
