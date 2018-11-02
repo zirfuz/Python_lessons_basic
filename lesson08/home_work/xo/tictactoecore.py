@@ -2,19 +2,29 @@ class TicTacToeCore:
     def __init__(self, size):
         self.__size = size
         self.reset()
+
+
     @property
     def current(self):
         return self.__current
+
+
     @property
     def game_over(self):
         return self.__game_over
+
+
     @property
     def size(self):
         return self.__size
+
+
     def reset(self):
         self.__current = 'x'
         self.__game_over = False
         self.__cells = [[None] * self.__size for _ in range(self.__size)]
+
+
     def action(self, i, j):
         if self.__game_over:
             return None
@@ -28,6 +38,7 @@ class TicTacToeCore:
         #Add draw
         self.__current = 'o' if self.__current == 'x' else 'x'
         return False
+
 
     def win(self):
         ret1 = []
