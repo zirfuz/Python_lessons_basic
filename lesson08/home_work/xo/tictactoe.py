@@ -6,8 +6,21 @@ import winsound
 def beep(freq, dur):
     winsound.Beep(freq, dur)
 
-G_SIZE = 20
+G_SIZE = 5
 G_BUTTON_SIZE = 1
+
+
+import random
+class StupidAi:
+    def action(self, matrix):
+        while True:
+            i = random.randint(0, G_SIZE - 1)
+            j = random.randint(0, G_SIZE - 1)
+            if matrix[i][j] is None:
+                return (i, j)
+        return None
+
+
 
 class TicTacToe:
     def __init__(self, size):
@@ -24,7 +37,7 @@ class TicTacToe:
         self.__buttons = [[None] * size for _ in range(size)]
         for i in range(size):
             for j in range(size):
-                # self.__buttons[i][j] = tk.Button(self.__frame, image=self.__empty_img, height=16, width=16, disabledforeground="blue", font=('', 10, 'bold'))
+                #self.__buttons[i][j] = tk.Button(self.__frame, image=self.__empty_img, height=24, width=24, disabledforeground="blue", font=('', 10, 'bold'), compound="center")
                 self.__buttons[i][j] = tk.Button(self.__frame, height=1, width=2, disabledforeground="blue", font=('', 10, 'bold'))
                 self.__buttons[i][j].grid(row=i, column=j)
                 self.__buttons[i][j].bind('<Button>', self.__clicked)
@@ -50,11 +63,9 @@ class TicTacToe:
         but['text'] = 'Player' if but['text'] == 'AI' else 'AI'
         beep(150, 75)
 
-
-    def __clicked(self, event):
-        but = event.widget
+    def __action(self, i, j):
+        but = self.__buttons[i][j]
         grid_info = but.grid_info()
-        i, j = grid_info['row'], grid_info['column']
         current = self.__ttt.current
         go = self.__ttt.game_over
         if self.__ttt.action(i,j) != None:
@@ -72,6 +83,18 @@ class TicTacToe:
             for cell in win_cells:
                 self.__buttons[cell[0]][cell[1]]['background'] = bg
             beep(400, 500)
+
+    def __clicked(self, event):
+        but = event.widget
+        if but['state'] == 'disabled':
+            return
+        grid_info = but.grid_info()
+        i, j = grid_info['row'], grid_info['column']
+        self.__action(i, j)
+
+        ai = StupidAi()
+        i, j = ai.action(self.__ttt.matrix)
+        self.__action(i, j)
 
 
     def __set_buttons_state(self, val):

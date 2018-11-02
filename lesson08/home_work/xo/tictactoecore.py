@@ -18,6 +18,10 @@ class TicTacToeCore:
     def size(self):
         return self.__size
 
+    @property
+    def matrix(self):
+        return self.__cells
+
 
     def reset(self):
         self.__current = 'x'
