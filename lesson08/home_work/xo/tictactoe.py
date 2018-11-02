@@ -34,6 +34,13 @@ class Ai:
             for j in range(G_SIZE):
                 if self.__win(matrix, i, j, cur):
                     return (i, j)
+
+        not_cur = 'x' if cur == 'o' else 'o'
+        for i in range(G_SIZE):
+            for j in range(G_SIZE):
+                if self.__win(matrix, i, j, not_cur):
+                    return (i, j)
+
         return self.rand_action(matrix)
 
     def __win(self, matrix, i, j, cur):
