@@ -4,7 +4,8 @@ from tictactoecore import TicTacToeCore
 import winsound
 
 def beep(freq, dur):
-    winsound.Beep(freq, dur)
+    #winsound.Beep(freq, dur)
+    pass
 
 G_SIZE = 10
 G_BUTTON_SIZE = 1
@@ -30,18 +31,50 @@ class Ai:
                 return (i, j)
 
     def action(self, matrix, cur):
+        not_cur = 'x' if cur == 'o' else 'o'
+
         for i in range(G_SIZE):
             for j in range(G_SIZE):
                 if self.__win(matrix, i, j, cur):
                     return (i, j)
 
-        not_cur = 'x' if cur == 'o' else 'o'
         for i in range(G_SIZE):
             for j in range(G_SIZE):
                 if self.__win(matrix, i, j, not_cur):
                     return (i, j)
 
+        for i in range(G_SIZE):
+            for j in range(G_SIZE):
+                if self.__win2(matrix, i, j, cur):
+                    return (i, j)
+
+        for i in range(G_SIZE):
+            for j in range(G_SIZE):
+                if self.__win2(matrix, i, j, not_cur):
+                    return (i, j)
+
         return self.rand_action(matrix)
+
+
+    def __win2(self, matrix, i, j, cur):
+        if matrix[i][j] is not None:
+            return None
+
+        for i in range(G_SIZE):
+            for j in range(G_SIZE):
+                if matrix[i][j] is not None: continue
+                matrix[i][j] = cur
+                if self.__win(matrix, i, j, cur):
+                    for ii in range(G_SIZE):
+                        counter = 0
+                        for jj in range(G_SIZE):
+                            if self.__win(matrix, ii, jj, cur):
+                                counter += 1
+                        if counter == 2:
+                            matrix[i][j] = None
+                            return True
+                matrix[i][j] = None
+        return False
 
     def __win(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
