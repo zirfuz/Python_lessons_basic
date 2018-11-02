@@ -6,7 +6,7 @@ import winsound
 def beep(freq, dur):
     winsound.Beep(freq, dur)
 
-G_SIZE = 5
+G_SIZE = 10
 G_BUTTON_SIZE = 1
 
 
@@ -19,6 +19,53 @@ class StupidAi:
             if matrix[i][j] is None:
                 return (i, j)
         return None
+
+
+class Ai:
+    def rand_action(self, matrix):
+        while True:
+            i = random.randint(0, G_SIZE - 1)
+            j = random.randint(0, G_SIZE - 1)
+            if matrix[i][j] is None:
+                return (i, j)
+
+    def action(self, matrix, cur):
+        for i in range(G_SIZE):
+            for j in range(G_SIZE):
+                if self.__win(matrix, i, j, cur):
+                    return (i, j)
+        return self.rand_action(matrix)
+
+    def __win(self, matrix, i, j, cur):
+        if matrix[i][j] is not None:
+            return None
+
+        counter = 0
+        for ii in range(i - 4, i + 5):
+            if ii < 0: continue
+            if ii >= len(matrix): break
+            match = ii == i or matrix[ii][j] == cur
+            if match:
+                counter += 1
+            if counter == 5:
+                return True
+            if not match:
+                counter = 0
+
+        counter = 0
+        for jj in range(j - 4, j + 5):
+            if jj < 0: continue
+            if jj >= len(matrix): break
+            match = jj == j or matrix[i][jj] == cur
+            if match:
+                counter += 1
+            if counter == 5:
+                return True
+            if not match:
+                counter = 0
+
+        return False
+
 
 
 
@@ -96,9 +143,10 @@ class TicTacToe:
         i, j = grid_info['row'], grid_info['column']
         self.__action(i, j)
 
-        ai = StupidAi()
-        i, j = ai.action(self.__ttt.matrix)
-        self.__action(i, j)
+        if self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
+            ai = Ai()
+            i, j = ai.action(self.__ttt.matrix, self.__ttt.current)
+            self.__action(i, j)
 
 
     def __set_buttons_state(self, val):
