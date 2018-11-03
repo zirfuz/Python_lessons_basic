@@ -7,7 +7,7 @@ def beep(freq, dur):
     #winsound.Beep(freq, dur)
     pass
 
-G_SIZE = 20
+G_SIZE = 12
 G_BUTTON_SIZE = 1
 
 import random
@@ -61,7 +61,7 @@ class Ai:
                 return (ij[0], ij[1])
 
         for ij in self.__lst:
-            if self.__win(matrix, ij[0], ij[1], cur):
+            if self.__win(matrix, ij[0], ij[1], not_cur):
                 return (ij[0], ij[1])
 
         for ij in self.__lst:
@@ -69,7 +69,7 @@ class Ai:
                 return (ij[0], ij[1])
 
         for ij in self.__lst:
-            if self.__win2(matrix, ij[0], ij[1], cur):
+            if self.__win2(matrix, ij[0], ij[1], not_cur):
                 return (ij[0], ij[1])
 
 
@@ -193,6 +193,36 @@ class Ai:
             if jj < 0: continue
             if jj >= len(matrix): break
             match = jj == j or matrix[i][jj] == cur
+            if match:
+                counter += 1
+            if counter == 5:
+                return True
+            if not match:
+                counter = 0
+
+        counter = 0
+        for kk in range(-4, 5):
+            ii = i + kk
+            jj = j + kk
+            if ii<0 or jj<0 or ii>=G_SIZE or jj>=G_SIZE:
+                continue
+
+            match = (ii == i and jj == j) or matrix[ii][jj] == cur
+            if match:
+                counter += 1
+            if counter == 5:
+                return True
+            if not match:
+                counter = 0
+
+        counter = 0
+        for kk in range(-4, 5):
+            ii = i + kk
+            jj = j - kk
+            if ii<0 or jj<0 or ii>=G_SIZE or jj>=G_SIZE:
+                continue
+
+            match = (ii == i and jj == j) or matrix[ii][jj] == cur
             if match:
                 counter += 1
             if counter == 5:
