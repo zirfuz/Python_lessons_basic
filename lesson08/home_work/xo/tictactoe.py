@@ -1,11 +1,11 @@
 import tkinter as tk
+import threading
 from tictactoecore import TicTacToeCore
 
 import winsound
 
 def beep(freq, dur):
-    #winsound.Beep(freq, dur)
-    pass
+    threading.Thread(target=lambda: winsound.Beep(freq, dur)).start()
 
 G_SIZE = 12
 G_BUTTON_SIZE = 1
@@ -259,6 +259,7 @@ class TicTacToe:
         self.__new_res.grid(row=size, column=(size-1)//2, columnspan=2)
 
         self.__ai = Ai()
+        self.__mutex = threading.Lock()
 
 
     def run(self):
@@ -293,21 +294,26 @@ class TicTacToe:
             beep(400, 500)
 
     def __clicked(self, event):
-        if self.__ttt.game_over:
-            self.__ttt.win()
+            if self.__ttt.game_over:
+                self.__ttt.win()
 
+            if self.__mutex.locked():
+                return
 
-        but = event.widget
-        if but['state'] == 'disabled':
-            return
-        grid_info = but.grid_info()
-        i, j = grid_info['row'], grid_info['column']
-        self.__action(i, j)
+            but = event.widget
+            if but['state'] == 'disabled':
+                return
 
-        if self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
-            i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
+            grid_info = but.grid_info()
+            i, j = grid_info['row'], grid_info['column']
             self.__action(i, j)
 
+            if self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
+                def action():
+                    with self.__mutex:
+                        i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
+                        self.__action(i, j)
+                threading.Thread(target=action).start()
 
     def __set_buttons_state(self, val):
         for i in range(self.__ttt.size):
