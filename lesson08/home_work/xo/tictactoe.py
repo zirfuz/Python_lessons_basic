@@ -25,6 +25,9 @@ class Ai:
     def __init__(self):
         self.__lst = []
 
+    def reset(self):
+        self.__lst.clear()
+
     def rand_action(self, matrix):
         if len(self.__lst) == 0:
             return (G_SIZE // 2, G_SIZE // 2) ###
@@ -53,25 +56,21 @@ class Ai:
     def action(self, matrix, cur):
         not_cur = 'x' if cur == 'o' else 'o'
 
-        for i in range(G_SIZE):
-            for j in range(G_SIZE):
-                if self.__win(matrix, i, j, cur):
-                    return (i, j)
+        for ij in self.__lst:
+            if self.__win(matrix, ij[0], ij[1], cur):
+                return (ij[0], ij[1])
 
-        for i in range(G_SIZE):
-            for j in range(G_SIZE):
-                if self.__win(matrix, i, j, not_cur):
-                    return (i, j)
+        for ij in self.__lst:
+            if self.__win(matrix, ij[0], ij[1], cur):
+                return (ij[0], ij[1])
 
-        for i in range(G_SIZE):
-            for j in range(G_SIZE):
-                if self.__win2(matrix, i, j, cur):
-                    return (i, j)
+        for ij in self.__lst:
+            if self.__win2(matrix, ij[0], ij[1], cur):
+                return (ij[0], ij[1])
 
-        for i in range(G_SIZE):
-            for j in range(G_SIZE):
-                if self.__win2(matrix, i, j, not_cur):
-                    return (i, j)
+        for ij in self.__lst:
+            if self.__win2(matrix, ij[0], ij[1], cur):
+                return (ij[0], ij[1])
 
 
         ret = self.rand_action(matrix)
@@ -160,8 +159,10 @@ class Ai:
 
         matrix[i][j] = cur
         counter = 0
-        for ii in range(G_SIZE):
-            for jj in range(G_SIZE):
+        for ii in range(i-5, i+6):
+            for jj in range(j-5, j+6):
+                if ii < 0 or jj < 0 or ii>=G_SIZE or jj>=G_SIZE or (ii==i and jj==j):
+                    continue
                 if self.__win(matrix, ii, jj, cur):
                     counter += 1
             if counter == 2:
@@ -296,6 +297,7 @@ class TicTacToe:
 
     def __reset(self):
         self.__set_buttons_state(True)
+        self.__ai.reset()
         for i in range(self.__ttt.size):
             for j in range(self.__ttt.size):
                 self.__ttt.reset()
