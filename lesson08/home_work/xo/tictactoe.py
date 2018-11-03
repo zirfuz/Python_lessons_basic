@@ -47,8 +47,9 @@ class Ai:
         if (i, j) in self.__lst:
             self.__lst.remove((i,j))
 
-        for ii in range(-2, 3):
-            for jj in range(-2, 3):
+        around = 1
+        for ii in range(-around, around+1):
+            for jj in range(-around, around+1):
                 if i+ii < 0 or j+jj < 0 or i+ii >= G_SIZE or j+jj >= G_SIZE or (ii == 0 and jj == 0):
                     continue
                 if matrix[i+ii][j+jj] is not None:
@@ -234,7 +235,8 @@ class TicTacToe:
 
     def __ai_if_need(self):
         if self.__ttt.current == 'x' and self.__button1['text'] == 'AI' or \
-                self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
+           self.__ttt.current == 'o' and self.__button2['text'] == 'AI' and \
+           not self.__ttt.game_over:
             def action():
                 with self.__mutex:
                     i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
