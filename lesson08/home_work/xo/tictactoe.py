@@ -7,7 +7,7 @@ import winsound
 def beep(freq, dur):
     threading.Thread(target=lambda: winsound.Beep(freq, dur)).start()
 
-G_SIZE = 15
+G_SIZE = 20
 G_BUTTON_SIZE = 1
 
 import random
@@ -239,7 +239,7 @@ class TicTacToe:
                 with self.__mutex:
                     i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
                     self.__action(i, j)
-                    self.__ai_if_need()
+                self.__ai_if_need()
 
             threading.Thread(target=action).start()
 
