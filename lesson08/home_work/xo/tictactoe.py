@@ -44,6 +44,9 @@ class Ai:
 
 
     def lst_append(self, matrix, i, j):
+        if (i, j) in self.__lst:
+            self.__lst.remove((i,j))
+
         for ii in range(-2, 3):
             for jj in range(-2, 3):
                 if i+ii < 0 or j+jj < 0 or i+ii >= G_SIZE or j+jj >= G_SIZE or (ii == 0 and jj == 0):
@@ -142,17 +145,6 @@ class Ai:
     def __win2(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
             return None
-
-        # bb = False
-        # for ii in range(-1,2):
-        #     for jj in range(-1,2):
-        #         if ii == 0 and jj == 0: continue
-        #         if i+ii not in range(G_SIZE) or j+jj not in range(G_SIZE): continue
-        #         if matrix[i+ii][j+jj] == cur:
-        #             bb = True
-        #             break
-        # if not bb:
-        #     return False
 
         if ((i, j)) not in self.__lst:
             return None
