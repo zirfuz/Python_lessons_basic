@@ -3,16 +3,13 @@ class TicTacToeCore:
         self.__size = size
         self.reset()
 
-
     @property
     def current(self):
         return self.__current
 
-
     @property
     def game_over(self):
         return self.__game_over
-
 
     @property
     def size(self):

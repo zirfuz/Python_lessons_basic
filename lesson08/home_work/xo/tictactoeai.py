@@ -1,11 +1,3 @@
-import tkinter as tk
-import threading
-from tictactoecore import TicTacToeCore
-
-import winsound
-
-G_SIZE = 15
-
 import random
 
 class TicTacToeAi:
@@ -16,11 +8,14 @@ class TicTacToeAi:
         self.__lst.clear()
 
     def rand_action(self, matrix):
+        size = len(matrix)
+
         if len(self.__lst) == 0:
-            return (G_SIZE // 2, G_SIZE // 2) ###
+            return (size // 2, size // 2)
+
         while True:
-            i = random.randint(0, G_SIZE - 1)
-            j = random.randint(0, G_SIZE - 1)
+            i = random.randint(0, size - 1)
+            j = random.randint(0, size - 1)
 
             if ((i, j)) not in self.__lst:
                 continue
@@ -31,13 +26,15 @@ class TicTacToeAi:
 
 
     def lst_append(self, matrix, i, j):
+        size = len(matrix)
+
         if (i, j) in self.__lst:
             self.__lst.remove((i,j))
 
         around = 1
         for ii in range(-around, around+1):
             for jj in range(-around, around+1):
-                if i+ii < 0 or j+jj < 0 or i+ii >= G_SIZE or j+jj >= G_SIZE or (ii == 0 and jj == 0):
+                if i+ii < 0 or j+jj < 0 or i+ii >= size or j+jj >= size or (ii == 0 and jj == 0):
                     continue
                 if matrix[i+ii][j+jj] is not None:
                     continue
@@ -74,11 +71,13 @@ class TicTacToeAi:
         if ((i, j)) not in self.__lst:
             return None
 
+        size = len(matrix)
+
         matrix[i][j] = cur
         counter = 0
         for ii in range(i-5, i+6):
             for jj in range(j-5, j+6):
-                if ii < 0 or jj < 0 or ii>=G_SIZE or jj>=G_SIZE or (ii==i and jj==j):
+                if ii<0 or jj<0 or ii>=size or jj>=size or (ii==i and jj==j):
                     continue
                 if self.__win(matrix, ii, jj, cur):
                     counter += 1
@@ -92,6 +91,8 @@ class TicTacToeAi:
     def __win(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
             return None
+
+        size = len(matrix)
 
         counter = 0
         for ii in range(i - 4, i + 5):
@@ -121,7 +122,7 @@ class TicTacToeAi:
         for kk in range(-4, 5):
             ii = i + kk
             jj = j + kk
-            if ii<0 or jj<0 or ii>=G_SIZE or jj>=G_SIZE:
+            if ii<0 or jj<0 or ii>=size or jj>=size:
                 continue
 
             match = (ii == i and jj == j) or matrix[ii][jj] == cur
@@ -136,7 +137,7 @@ class TicTacToeAi:
         for kk in range(-4, 5):
             ii = i + kk
             jj = j - kk
-            if ii<0 or jj<0 or ii>=G_SIZE or jj>=G_SIZE:
+            if ii<0 or jj<0 or ii>=size or jj>=size:
                 continue
 
             match = (ii == i and jj == j) or matrix[ii][jj] == cur
