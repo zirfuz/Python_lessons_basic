@@ -7,7 +7,7 @@ import winsound
 def beep(freq, dur):
     threading.Thread(target=lambda: winsound.Beep(freq, dur)).start()
 
-G_SIZE = 20
+G_SIZE = 15
 G_BUTTON_SIZE = 1
 
 import random
