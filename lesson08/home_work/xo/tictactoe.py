@@ -7,9 +7,8 @@ def beep(freq, dur):
     #winsound.Beep(freq, dur)
     pass
 
-G_SIZE = 6
+G_SIZE = 20
 G_BUTTON_SIZE = 1
-
 
 import random
 class StupidAi:
@@ -23,12 +22,33 @@ class StupidAi:
 
 
 class Ai:
+    def __init__(self):
+        self.__lst = []
+
     def rand_action(self, matrix):
+        if len(self.__lst) == 0:
+            return (G_SIZE // 2, G_SIZE // 2) ###
         while True:
             i = random.randint(0, G_SIZE - 1)
             j = random.randint(0, G_SIZE - 1)
+
+            if ((i, j)) not in self.__lst:
+                continue
+
             if matrix[i][j] is None:
                 return (i, j)
+
+
+
+    def lst_append(self, matrix, i, j):
+        for ii in range(-2, 3):
+            for jj in range(-2, 3):
+                if i+ii < 0 or j+jj < 0 or i+ii >= G_SIZE or j+jj >= G_SIZE or (ii == 0 and jj == 0):
+                    continue
+                if matrix[i+ii][j+jj] is not None:
+                    continue
+                if (i+ii, j+jj) not in self.__lst:
+                    self.__lst.append((i+ii, j+jj))
 
     def action(self, matrix, cur):
         not_cur = 'x' if cur == 'o' else 'o'
@@ -53,11 +73,89 @@ class Ai:
                 if self.__win2(matrix, i, j, not_cur):
                     return (i, j)
 
-        return self.rand_action(matrix)
+
+        ret = self.rand_action(matrix)
+        return ret
+
+    def __win_n(self, matrix, i, j, cur, deep):
+  #      print('%d %d  %d' % (i,j,deep))
+        if matrix[i][j] is not None:
+            return None
+
+
+
+        bb = False
+        for ii in range(-1,2):
+            for jj in range(-1,2):
+                if ii == 0 and jj == 0: continue
+                if i+ii not in range(G_SIZE) or j+jj not in range(G_SIZE): continue
+                if matrix[i+ii][j+jj] == cur:
+                    bb = True
+                    break
+        if not bb:
+            return False
+
+        if self.__win(matrix, i, j, cur) or self.__win2(matrix, i, j, cur):
+            return True
+
+        if deep == 0:
+            return False
+
+        matrix[i][j] = cur
+        not_cur = 'x' if cur == 'o' else 'o'
+
+        # for ii in range(G_SIZE):
+        #     for jj in range(G_SIZE):
+        #         if self.__win_n(matrix, ii, jj, not_cur, deep - 1):
+        #             return False
+
+        ret = True
+        for ii in range(G_SIZE):
+            for jj in range(G_SIZE):
+                if matrix[ii][jj] is not None: continue
+                if self.__win(matrix, ii, jj, not_cur) or self.__win2(matrix, ii, jj, not_cur):
+                    matrix[i][j] = None
+                    return False
+                matrix[ii][jj] = not_cur
+                counter = 0
+                b = False
+                for iii in range(G_SIZE):
+                    for jjj in range(G_SIZE):
+                        if matrix[iii][jjj] is not None: continue
+                        # if not self.__win_n(matrix, iii, jjj, cur, deep - 1):
+                        #     matrix[i][j] = None
+                        #     matrix[ii][jj] = None
+                        #     return False
+                        if self.__win_n(matrix, iii, jjj, cur, deep - 1):
+                             b = True
+                             iii = G_SIZE
+                             break
+                matrix[ii][jj] = None
+                if not b:
+                    ret = False
+                    ii = G_SIZE
+                    break
+
+        matrix[i][j] = None
+        return ret
 
 
     def __win2(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
+            return None
+
+        # bb = False
+        # for ii in range(-1,2):
+        #     for jj in range(-1,2):
+        #         if ii == 0 and jj == 0: continue
+        #         if i+ii not in range(G_SIZE) or j+jj not in range(G_SIZE): continue
+        #         if matrix[i+ii][j+jj] == cur:
+        #             bb = True
+        #             break
+        # if not bb:
+        #     return False
+
+        if ((i, j)) not in self.__lst:
             return None
 
         matrix[i][j] = cur
@@ -72,9 +170,10 @@ class Ai:
         matrix[i][j] = None
         return False
 
+
     def __win(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
-            return False
+            return None
 
         counter = 0
         for ii in range(i - 4, i + 5):
@@ -136,6 +235,8 @@ class TicTacToe:
         self.__new_res = tk.Button(self.__frame, text="New", command=self.__reset)
         self.__new_res.grid(row=size, column=(size-1)//2, columnspan=2)
 
+        self.__ai = Ai()
+
 
     def run(self):
         self.__root.mainloop()
@@ -148,6 +249,7 @@ class TicTacToe:
 
     def __action(self, i, j):
         but = self.__buttons[i][j]
+        self.__ai.lst_append(self.__ttt.matrix, i, j)
         grid_info = but.grid_info()
         current = self.__ttt.current
         go = self.__ttt.game_over
@@ -180,8 +282,7 @@ class TicTacToe:
         self.__action(i, j)
 
         if self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
-            ai = Ai()
-            i, j = ai.action(self.__ttt.matrix, self.__ttt.current)
+            i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
             self.__action(i, j)
 
 
