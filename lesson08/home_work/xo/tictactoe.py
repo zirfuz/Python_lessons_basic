@@ -79,68 +79,6 @@ class Ai:
         ret = self.rand_action(matrix)
         return ret
 
-    def __win_n(self, matrix, i, j, cur, deep):
-  #      print('%d %d  %d' % (i,j,deep))
-        if matrix[i][j] is not None:
-            return None
-
-
-
-        bb = False
-        for ii in range(-1,2):
-            for jj in range(-1,2):
-                if ii == 0 and jj == 0: continue
-                if i+ii not in range(G_SIZE) or j+jj not in range(G_SIZE): continue
-                if matrix[i+ii][j+jj] == cur:
-                    bb = True
-                    break
-        if not bb:
-            return False
-
-        if self.__win(matrix, i, j, cur) or self.__win2(matrix, i, j, cur):
-            return True
-
-        if deep == 0:
-            return False
-
-        matrix[i][j] = cur
-        not_cur = 'x' if cur == 'o' else 'o'
-
-        # for ii in range(G_SIZE):
-        #     for jj in range(G_SIZE):
-        #         if self.__win_n(matrix, ii, jj, not_cur, deep - 1):
-        #             return False
-
-        ret = True
-        for ii in range(G_SIZE):
-            for jj in range(G_SIZE):
-                if matrix[ii][jj] is not None: continue
-                if self.__win(matrix, ii, jj, not_cur) or self.__win2(matrix, ii, jj, not_cur):
-                    matrix[i][j] = None
-                    return False
-                matrix[ii][jj] = not_cur
-                counter = 0
-                b = False
-                for iii in range(G_SIZE):
-                    for jjj in range(G_SIZE):
-                        if matrix[iii][jjj] is not None: continue
-                        # if not self.__win_n(matrix, iii, jjj, cur, deep - 1):
-                        #     matrix[i][j] = None
-                        #     matrix[ii][jj] = None
-                        #     return False
-                        if self.__win_n(matrix, iii, jjj, cur, deep - 1):
-                             b = True
-                             iii = G_SIZE
-                             break
-                matrix[ii][jj] = None
-                if not b:
-                    ret = False
-                    ii = G_SIZE
-                    break
-
-        matrix[i][j] = None
-        return ret
-
 
     def __win2(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
