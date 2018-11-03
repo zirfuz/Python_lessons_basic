@@ -7,7 +7,7 @@ import winsound
 def beep(freq, dur):
     threading.Thread(target=lambda: winsound.Beep(freq, dur)).start()
 
-G_SIZE = 12
+G_SIZE = 20
 G_BUTTON_SIZE = 1
 
 import random
@@ -208,6 +208,7 @@ class TicTacToe:
         but = event.widget
         but['text'] = 'Player' if but['text'] == 'AI' else 'AI'
         beep(150, 75)
+        self.__ai_if_need()
 
     def __action(self, i, j):
         but = self.__buttons[i][j]
@@ -231,6 +232,17 @@ class TicTacToe:
                 self.__buttons[cell[0]][cell[1]]['background'] = bg
             beep(400, 500)
 
+    def __ai_if_need(self):
+        if self.__ttt.current == 'x' and self.__button1['text'] == 'AI' or \
+                self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
+            def action():
+                with self.__mutex:
+                    i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
+                    self.__action(i, j)
+                    self.__ai_if_need()
+
+            threading.Thread(target=action).start()
+
     def __clicked(self, event):
             if self.__ttt.game_over:
                 self.__ttt.win()
@@ -246,12 +258,7 @@ class TicTacToe:
             i, j = grid_info['row'], grid_info['column']
             self.__action(i, j)
 
-            if self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
-                def action():
-                    with self.__mutex:
-                        i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
-                        self.__action(i, j)
-                threading.Thread(target=action).start()
+            self.__ai_if_need()
 
     def __set_buttons_state(self, val):
         for i in range(self.__ttt.size):
@@ -271,6 +278,7 @@ class TicTacToe:
                 but['text'] = ''
                 but['background'] = self.__root.cget("background")
         beep(700, 75)
+        self.__ai_if_need()
     # def __for_each(self, fun, *args):
     #     for i in range(self.__ttt.size):
     #         for j in range(self.__ttt.size):
