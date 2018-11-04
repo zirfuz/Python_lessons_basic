@@ -2,30 +2,30 @@ import random
 
 class TicTacToeAi:
     def __init__(self):
-        self.__lst = []
+        self._lst = []
 
 
     def reset(self):
-        self.__lst.clear()
+        self._lst.clear()
 
 
     def action(self, matrix, cur):
         not_cur = 'x' if cur == 'o' else 'o'
 
-        for ij in self.__lst:
-            if self.__win(matrix, ij[0], ij[1], cur):
+        for ij in self._lst:
+            if self._win(matrix, ij[0], ij[1], cur):
                 return (ij[0], ij[1])
 
-        for ij in self.__lst:
-            if self.__win(matrix, ij[0], ij[1], not_cur):
+        for ij in self._lst:
+            if self._win(matrix, ij[0], ij[1], not_cur):
                 return (ij[0], ij[1])
 
-        for ij in self.__lst:
-            if self.__win2(matrix, ij[0], ij[1], cur):
+        for ij in self._lst:
+            if self._win2(matrix, ij[0], ij[1], cur):
                 return (ij[0], ij[1])
 
-        for ij in self.__lst:
-            if self.__win2(matrix, ij[0], ij[1], not_cur):
+        for ij in self._lst:
+            if self._win2(matrix, ij[0], ij[1], not_cur):
                 return (ij[0], ij[1])
 
         return self.rand_action(matrix)
@@ -34,14 +34,14 @@ class TicTacToeAi:
     def rand_action(self, matrix):
         size = len(matrix)
 
-        if len(self.__lst) == 0:
+        if len(self._lst) == 0:
             return (size // 2, size // 2)
 
         while True:
             i = random.randint(0, size - 1)
             j = random.randint(0, size - 1)
 
-            if ((i, j)) not in self.__lst:
+            if ((i, j)) not in self._lst:
                 continue
 
             if matrix[i][j] is None:
@@ -51,8 +51,8 @@ class TicTacToeAi:
     def lst_append(self, matrix, i, j):
         size = len(matrix)
 
-        if (i, j) in self.__lst:
-            self.__lst.remove((i,j))
+        if (i, j) in self._lst:
+            self._lst.remove((i,j))
 
         around = 1
         for ii in range(-around, around+1):
@@ -61,15 +61,15 @@ class TicTacToeAi:
                     continue
                 if matrix[i+ii][j+jj] is not None:
                     continue
-                if (i+ii, j+jj) not in self.__lst:
-                    self.__lst.append((i+ii, j+jj))
+                if (i+ii, j+jj) not in self._lst:
+                    self._lst.append((i+ii, j+jj))
 
 
-    def __win2(self, matrix, i, j, cur):
+    def _win2(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
             return None
 
-        if ((i, j)) not in self.__lst:
+        if ((i, j)) not in self._lst:
             return None
 
         size = len(matrix)
@@ -80,7 +80,7 @@ class TicTacToeAi:
             for jj in range(j-5, j+6):
                 if ii<0 or jj<0 or ii>=size or jj>=size or (ii==i and jj==j):
                     continue
-                if self.__win(matrix, ii, jj, cur):
+                if self._win(matrix, ii, jj, cur):
                     counter += 1
             if counter == 2:
                 matrix[i][j] = None
@@ -89,7 +89,7 @@ class TicTacToeAi:
         return False
 
 
-    def __win(self, matrix, i, j, cur):
+    def _win(self, matrix, i, j, cur):
         if matrix[i][j] is not None:
             return None
 

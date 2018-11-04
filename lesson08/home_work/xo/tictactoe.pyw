@@ -22,90 +22,90 @@ G_SIZE = 15
 
 class TicTacToe:
     def __init__(self, size):
-        self.__root = tk.Tk()
-        self.__frame = tk.Frame(self.__root)
-        self.__frame.pack()
-        self.__root.resizable(0,0)
-        self.__root.wm_title('Tic-Tac-Toe')
-        self.__ttt = TicTacToeCore(size)
-        self.__cong = False
+        self._root = tk.Tk()
+        self._frame = tk.Frame(self._root)
+        self._frame.pack()
+        self._root.resizable(0,0)
+        self._root.wm_title('Tic-Tac-Toe')
+        self._ttt = TicTacToeCore(size)
+        self._cong = False
 
-        self.__buttons = [[None] * size for _ in range(size)]
+        self._buttons = [[None] * size for _ in range(size)]
         for i in range(size):
             for j in range(size):
-                self.__buttons[i][j] = tk.Button(self.__frame, width=G_BUTTON_WIDTH, height=G_BUTTON_HEIGHT, disabledforeground="blue", font=('', 10, 'bold'))
-                self.__buttons[i][j].grid(row=i, column=j)
-                self.__buttons[i][j].bind('<Button>', self.__clicked)
+                self._buttons[i][j] = tk.Button(self._frame, width=G_BUTTON_WIDTH, height=G_BUTTON_HEIGHT, disabledforeground="blue", font=('', 10, 'bold'))
+                self._buttons[i][j].grid(row=i, column=j)
+                self._buttons[i][j].bind('<Button>', self._clicked)
 
-        self.__button1 = tk.Button(self.__frame, text="Player", fg="blue", activeforeground='blue')
-        self.__button1.grid(row=size, column=0, columnspan=2)
-        self.__button1.bind('<Button>', self.__change_player)
+        self._button1 = tk.Button(self._frame, text="Player", fg="blue", activeforeground='blue')
+        self._button1.grid(row=size, column=0, columnspan=2)
+        self._button1.bind('<Button>', self._change_player)
 
-        self.__button2 = tk.Button(self.__frame, text="Player", fg="red", activeforeground='red')
-        self.__button2.grid(row=size, column=size-2, columnspan=2)
-        self.__button2.bind('<Button>', self.__change_player)
+        self._button2 = tk.Button(self._frame, text="Player", fg="red", activeforeground='red')
+        self._button2.grid(row=size, column=size-2, columnspan=2)
+        self._button2.bind('<Button>', self._change_player)
 
-        self.__new_res = tk.Button(self.__frame, text="New", command=self.__reset)
-        self.__new_res.grid(row=size, column=(size-1)//2, columnspan=2)
+        self._new_res = tk.Button(self._frame, text="New", command=self._reset)
+        self._new_res.grid(row=size, column=(size-1)//2, columnspan=2)
 
-        self.__ai = TicTacToeAi()
-        self.__mutex = threading.Lock()
+        self._ai = TicTacToeAi()
+        self._mutex = threading.Lock()
 
 
     def run(self):
-        threading.Thread(target=self.__run_ai).start()
-        self.__root.mainloop()
+        threading.Thread(target=self._run_ai).start()
+        self._root.mainloop()
 
 
-    def __change_player(self, event):
+    def _change_player(self, event):
         but = event.widget
         but['text'] = 'Player' if but['text'] == 'AI' else 'AI'
         beep(150, 75)
 
 
-    def __action(self, i, j):
-        if self.__ttt.game_over:
+    def _action(self, i, j):
+        if self._ttt.game_over:
             return
 
-        but = self.__buttons[i][j]
-        self.__ai.lst_append(self.__ttt.matrix, i, j)
+        but = self._buttons[i][j]
+        self._ai.lst_append(self._ttt.matrix, i, j)
         grid_info = but.grid_info()
-        current = self.__ttt.current
-        go = self.__ttt.game_over
-        if self.__ttt.action(i,j) != None:
+        current = self._ttt.current
+        go = self._ttt.game_over
+        if self._ttt.action(i,j) != None:
             x_turn = current == 'x'
             but['text'] = '✕' if x_turn else '◯'
             but['disabledforeground'] = 'blue' if x_turn else 'red'
             but['state'] = 'disabled'
             freq = 350 if x_turn else 300
-            if not self.__ttt.win():
+            if not self._ttt.win():
                 beep(freq, 200)
-        win_cells = self.__ttt.win()
+        win_cells = self._ttt.win()
         if win_cells is not None and not go:
-            self.__set_buttons_state(False)
-            bg = 'orange' if self.__ttt.current == 'x' else 'yellow green'
+            self._set_buttons_state(False)
+            bg = 'orange' if self._ttt.current == 'x' else 'yellow green'
             for cell in win_cells:
-                self.__buttons[cell[0]][cell[1]]['background'] = bg
+                self._buttons[cell[0]][cell[1]]['background'] = bg
             beep(400, 500)
 
 
-    def __run_ai(self):
+    def _run_ai(self):
         while True:
-            if (self.__ttt.current == 'x' and self.__button1['text'] == 'AI' or \
-                self.__ttt.current == 'o' and self.__button2['text'] == 'AI') and \
-                not self.__ttt.game_over:
-                with self.__mutex:
-                    i, j = self.__ai.action(self.__ttt.matrix, self.__ttt.current)
-                    self.__action(i, j)
+            if (self._ttt.current == 'x' and self._button1['text'] == 'AI' or \
+                self._ttt.current == 'o' and self._button2['text'] == 'AI') and \
+                not self._ttt.game_over:
+                with self._mutex:
+                    i, j = self._ai.action(self._ttt.matrix, self._ttt.current)
+                    self._action(i, j)
                 time.sleep(0.1)
 
 
-    def __clicked(self, event):
-        if self.__mutex.locked():
+    def _clicked(self, event):
+        if self._mutex.locked():
             return
 
-        if self.__ttt.current == 'x' and self.__button1['text'] == 'AI' or \
-           self.__ttt.current == 'o' and self.__button2['text'] == 'AI':
+        if self._ttt.current == 'x' and self._button1['text'] == 'AI' or \
+           self._ttt.current == 'o' and self._button2['text'] == 'AI':
            return
 
         but = event.widget
@@ -114,24 +114,24 @@ class TicTacToe:
 
         grid_info = but.grid_info()
         i, j = grid_info['row'], grid_info['column']
-        self.__action(i, j)
+        self._action(i, j)
 
-    def __set_buttons_state(self, val):
-        for i in range(self.__ttt.size):
-            for j in range(self.__ttt.size):
-                self.__buttons[i][j]['state'] = 'normal' if val else 'disabled'
+    def _set_buttons_state(self, val):
+        for i in range(self._ttt.size):
+            for j in range(self._ttt.size):
+                self._buttons[i][j]['state'] = 'normal' if val else 'disabled'
 
-    def __reset(self):
-        if self.__mutex.locked(): return
-        self.__set_buttons_state(True)
-        self.__ttt.reset()
-        self.__ai.reset()
-        for i in range(self.__ttt.size):
-            for j in range(self.__ttt.size):
-                self.__ttt.reset()
-                but = self.__buttons[i][j]
+    def _reset(self):
+        if self._mutex.locked(): return
+        self._set_buttons_state(True)
+        self._ttt.reset()
+        self._ai.reset()
+        for i in range(self._ttt.size):
+            for j in range(self._ttt.size):
+                self._ttt.reset()
+                but = self._buttons[i][j]
                 but['text'] = ''
-                but['background'] = self.__root.cget("background")
+                but['background'] = self._root.cget("background")
         beep(700, 75)
 
 
