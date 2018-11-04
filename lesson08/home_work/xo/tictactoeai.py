@@ -4,42 +4,10 @@ class TicTacToeAi:
     def __init__(self):
         self.__lst = []
 
+
     def reset(self):
         self.__lst.clear()
 
-    def rand_action(self, matrix):
-        size = len(matrix)
-
-        if len(self.__lst) == 0:
-            return (size // 2, size // 2)
-
-        while True:
-            i = random.randint(0, size - 1)
-            j = random.randint(0, size - 1)
-
-            if ((i, j)) not in self.__lst:
-                continue
-
-            if matrix[i][j] is None:
-                return (i, j)
-
-
-
-    def lst_append(self, matrix, i, j):
-        size = len(matrix)
-
-        if (i, j) in self.__lst:
-            self.__lst.remove((i,j))
-
-        around = 1
-        for ii in range(-around, around+1):
-            for jj in range(-around, around+1):
-                if i+ii < 0 or j+jj < 0 or i+ii >= size or j+jj >= size or (ii == 0 and jj == 0):
-                    continue
-                if matrix[i+ii][j+jj] is not None:
-                    continue
-                if (i+ii, j+jj) not in self.__lst:
-                    self.__lst.append((i+ii, j+jj))
 
     def action(self, matrix, cur):
         not_cur = 'x' if cur == 'o' else 'o'
@@ -62,6 +30,40 @@ class TicTacToeAi:
 
 
         return self.rand_action(matrix)
+
+
+    def rand_action(self, matrix):
+        size = len(matrix)
+
+        if len(self.__lst) == 0:
+            return (size // 2, size // 2)
+
+        while True:
+            i = random.randint(0, size - 1)
+            j = random.randint(0, size - 1)
+
+            if ((i, j)) not in self.__lst:
+                continue
+
+            if matrix[i][j] is None:
+                return (i, j)
+
+
+    def lst_append(self, matrix, i, j):
+        size = len(matrix)
+
+        if (i, j) in self.__lst:
+            self.__lst.remove((i,j))
+
+        around = 1
+        for ii in range(-around, around+1):
+            for jj in range(-around, around+1):
+                if i+ii < 0 or j+jj < 0 or i+ii >= size or j+jj >= size or (ii == 0 and jj == 0):
+                    continue
+                if matrix[i+ii][j+jj] is not None:
+                    continue
+                if (i+ii, j+jj) not in self.__lst:
+                    self.__lst.append((i+ii, j+jj))
 
 
     def __win2(self, matrix, i, j, cur):
