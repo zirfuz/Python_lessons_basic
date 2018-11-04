@@ -28,7 +28,6 @@ class TicTacToeAi:
             if self.__win2(matrix, ij[0], ij[1], not_cur):
                 return (ij[0], ij[1])
 
-
         return self.rand_action(matrix)
 
 

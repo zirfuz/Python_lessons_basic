@@ -36,7 +36,9 @@ class TicTacToeCore:
         self.__cells[i][j] = self.__current
         if self.win():
             return True
+
         #Add draw
+
         self.__current = 'o' if self.__current == 'x' else 'x'
         return False
 
@@ -129,5 +131,4 @@ class TicTacToeCore:
             return None
 
         self.__game_over = True
-       # self.win()
         return ret
